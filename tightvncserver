@@ -1,0 +1,48 @@
+#!/bin/bash
+# /etc/init.d/tightvncserver
+#
+
+# Carry out specific functions when asked to by the system
+case "$1" in
+status)
+   running=`ps -ef | grep Xtightvnc | grep -v grep | awk '{print $1" "$2}'`
+
+   if [ -n "${running}" ]; then
+     echo "Xtightvnc is running :: ${running}"
+   else
+     echo "Xtightvnc is stopped"
+   fi
+   ;;
+start)
+    su pi -c '/usr/bin/vncserver :1 -geometry 1440x900'
+    echo "Starting VNC server "
+    ;;
+stop)
+    pkill Xtightvnc
+   
+    stopped=`ps -ef | grep Xtightvnc | grep -v grep`
+    if [ -z "${running}" ]; then
+      if [ -f /tmp/.X1-lock ]; then
+        /bin/rm -f /tmp/.X1-lock
+      fi
+
+      if [ -d /tmp/.X11-unix ]; then
+        rm -rf /tmp/.X11-unix
+      fi
+
+    else
+      echo "VNC Server has been stopped (didn't double check though)"
+    fi
+   
+    ;;
+restart)
+    stop
+    start
+    ;;
+*)
+    echo "Usage: ${0} {start|stop}"
+    exit 1
+    ;;
+esac
+
+exit 0

@@ -1,0 +1,12 @@
+---
+- hosts: pi
+
+  tasks: 
+  - name: Ensure tightvncserver package is installed
+    apt: name=tightvncserver state=present
+
+  - name: install tightvncserver init.d script
+    copy: src=/ansible/pi/tightvncserver dest=/etc/init.d
+
+  - name: activate and start tightvncserver service
+    service: name=tightvncserver state=started enabled=yes
