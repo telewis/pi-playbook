@@ -6,7 +6,7 @@
     apt: name=tightvncserver state=present
 
   - name: install tightvncserver init.d script
-    copy: src=/ansible/pi/tightvncserver dest=/etc/init.d
+    copy: src=/ansible/pi/tightvncserver dest=/etc/init.d mode=0755
 
   - name: activate and start tightvncserver service
     service: name=tightvncserver state=started enabled=yes
